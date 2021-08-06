@@ -1,6 +1,11 @@
+$whiteKeyWidth: 30px;
+$blackKeyWidth: 25px;
+$blackKeyHeight: 60%;
+
 .keyboard {
-  flex: 0 0 500px;
-  width: 500px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  // width: min-content;
   height: 200px;
   border: 1px solid black;
   box-sizing: border-box;
@@ -11,15 +16,10 @@
     'top top top'
     'left keys right';
   grid-template-rows: minmax(0, 1fr) minmax(0, 4fr);
-  grid-template-columns: minmax(0, 50px) minmax(0, auto) minmax(0, 50px);
+  grid-template-columns: minmax(0, 50px) min-content minmax(0, 50px);
 
   .top-row {
     grid-area: top;
-  }
-
-  .keys-area {
-    grid-area: keys;
-    border: 1px solid black;
   }
 
   .left-side {
@@ -28,5 +28,45 @@
 
   .right-side {
     grid-area: right;
+  }
+
+  .keys-area {
+    grid-area: keys;
+    border: 3px solid black;
+    border-radius: 2px;
+    box-sizing: border-box;
+    display: flex;
+
+    .key-pair {
+      height: 100%;
+      position: relative;
+    }
+
+    .white-key {
+      width: $whiteKeyWidth;
+      height: 100%;
+      border: 1px solid black;
+      border-radius: 2px;
+      box-sizing: content-box;
+
+      &:hover {
+        background-color: grey;
+      }
+    }
+
+    .black-key {
+      z-index: 10;
+      position: absolute;
+      top: 0;
+      left: 17px;
+      width: $blackKeyWidth;
+      height: $blackKeyHeight;
+      background-color: black;
+      border-radius: 2px 2px 5px 5px;
+
+      &:hover {
+        background-color: grey;
+      }
+    }
   }
 }

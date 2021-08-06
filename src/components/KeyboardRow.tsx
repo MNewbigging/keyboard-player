@@ -22,7 +22,7 @@ export class KeyboardRow extends React.Component<Props> {
           +
         </div>
         {keyboardRow.map((kb) => (
-          <Keyboard keyboard={kb} />
+          <Keyboard key={kb.id} keyboard={kb} />
         ))}
       </div>
     );

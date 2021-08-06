@@ -3,10 +3,9 @@ import React from 'react';
 
 import { AppState } from '../state/AppState';
 import { Header } from './Header';
-import { Keyboard } from '../components/Keyboard';
+import { KeyboardRow } from './KeyboardRow';
 
 import './app.scss';
-import { KeyboardRow } from './KeyboardRow';
 
 @observer
 export class App extends React.PureComponent {
