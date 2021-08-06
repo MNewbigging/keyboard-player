@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { KeyboardItem } from '../model/KeyboardItem';
+import { KeyboardItem, Notes } from '../model/KeyboardItem';
 
 import './keyboard.scss';
 
@@ -25,27 +25,44 @@ export class Keyboard extends React.Component<Props> {
   private renderKeys() {
     const { keyboard } = this.props;
 
-    const octaves: JSX.Element[] = [];
+    const keys: JSX.Element[] = [];
 
-    for (let i = 0; i < keyboard.octaves; i++) {
-      octaves.push(this.renderOctave());
+    // 12 notes to an octave
+    const totalNotes = keyboard.octaves * 12;
+    const notes = Object.values(Notes);
+    console.log('notes: ', notes);
+
+    let currentNote: number = notes.indexOf(keyboard.firstNote);
+    for (let i = 0; i < totalNotes; i++) {
+      const note = notes[currentNote];
+      const key = this.getKey(note);
+      keys.push(key);
+
+      currentNote++;
+      if (currentNote === notes.length) {
+        currentNote = 0;
+      }
     }
 
-    return octaves;
+    // Add final key
+    const lastKey = this.renderWhiteKey();
+    keys.push(lastKey);
+
+    return keys;
   }
 
-  private renderOctave() {
-    return (
-      <>
-        {this.renderWhiteBlackKeyPair()}
-        {this.renderWhiteBlackKeyPair()}
-        {this.renderWhiteKey()}
-        {this.renderWhiteBlackKeyPair()}
-        {this.renderWhiteBlackKeyPair()}
-        {this.renderWhiteBlackKeyPair()}
-        {this.renderWhiteKey()}
-      </>
-    );
+  private getKey(note: Notes) {
+    switch (note) {
+      case Notes.C:
+      case Notes.D:
+      case Notes.F:
+      case Notes.G:
+      case Notes.A:
+        return this.renderWhiteBlackKeyPair();
+      case Notes.E:
+      case Notes.B:
+        return this.renderWhiteKey();
+    }
   }
 
   private renderWhiteKey() {
