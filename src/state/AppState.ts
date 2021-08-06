@@ -3,9 +3,15 @@ import { action, observable } from 'mobx';
 import { KeyboardItem } from '../model/KeyboardItem';
 
 export class AppState {
-  @observable keyboards: KeyboardItem[] = [];
+  @observable topRowKeyboards: KeyboardItem[] = [];
+  @observable botRowKeyboards: KeyboardItem[] = [];
 
-  @action addKeyboard() {
-    this.keyboards.push(new KeyboardItem());
+  @action addTopRowKeyboard() {
+    this.topRowKeyboards.push(new KeyboardItem());
+  }
+
+  @action addBotRowKeyboard() {
+    this.botRowKeyboards.push(new KeyboardItem());
+    console.log('bot: ', this.botRowKeyboards);
   }
 }

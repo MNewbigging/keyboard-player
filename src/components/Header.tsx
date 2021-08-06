@@ -12,12 +12,6 @@ export class Header extends React.Component<Props> {
   public render() {
     const { appState } = this.props;
 
-    return (
-      <div className={'header'}>
-        <button className={'button'} onClick={() => appState.addKeyboard()}>
-          Add Keyboard
-        </button>
-      </div>
-    );
+    return <div className={'header'}></div>;
   }
 }

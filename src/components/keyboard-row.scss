@@ -1,0 +1,20 @@
+.keyboard-row {
+  height: 100%;
+
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  .add-keyboard {
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    background-color: grey;
+    color: white;
+    margin-left: 5px;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

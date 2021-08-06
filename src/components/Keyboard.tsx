@@ -3,6 +3,8 @@ import React from 'react';
 
 import { KeyboardItem } from '../model/KeyboardItem';
 
+import './keyboard.scss';
+
 interface Props {
   keyboard: KeyboardItem;
 }
@@ -11,8 +13,11 @@ interface Props {
 export class Keyboard extends React.Component<Props> {
   public render() {
     return (
-      <div>
-        <div></div>
+      <div className={'keyboard'}>
+        <div className={'top-row'}></div>
+        <div className={'left-side'}></div>
+        <div className={'keys-area'}></div>
+        <div className={'right-side'}></div>
       </div>
     );
   }

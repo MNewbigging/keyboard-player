@@ -6,8 +6,26 @@ body {
 #app-root {
   width: 100vw;
   height: 100vh;
+  overflow-y: hidden;
+  overflow-x: scroll;
+
+  display: grid;
+  grid-template-areas:
+    'header'
+    'top-row'
+    'bot-row';
+  grid-template-rows: minmax(0, 50px) minmax(0, 50%) minmax(0, 50%);
+  grid-template-columns: minmax(0, auto);
 }
 
-.button {
-  margin-left: 5px;
+.header {
+  grid-area: header;
+}
+
+.top-row {
+  grid-area: top-row;
+}
+
+.bot-row {
+  grid-area: bot-row;
 }
