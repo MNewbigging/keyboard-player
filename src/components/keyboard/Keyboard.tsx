@@ -1,9 +1,12 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { KeyboardItem, Notes, octaves, Octaves, whiteNotes } from '../model/KeyboardItem';
+import { KeyboardItem, Notes, octaves, Octaves, whiteNotes } from '../../model/KeyboardItem';
 
 import './keyboard.scss';
+import { KeyboardTopControls } from './KeyboardTopControls';
+import { WhiteBlackKeyPair } from './WhiteBlackKeyPair';
+import { WhiteKey } from './WhiteKey';
 
 interface Props {
   keyboard: KeyboardItem;
@@ -12,9 +15,13 @@ interface Props {
 @observer
 export class Keyboard extends React.Component<Props> {
   public render() {
+    const { keyboard } = this.props;
+
     return (
       <div className={'keyboard'}>
-        <div className={'top-row'}></div>
+        <div className={'top-row'}>
+          <KeyboardTopControls keyboard={keyboard} />
+        </div>
         <div className={'left-side'}></div>
         <div className={'keys-area'}>{this.renderKeys()}</div>
         <div className={'right-side'}></div>
@@ -89,37 +96,12 @@ export class Keyboard extends React.Component<Props> {
   private renderWhiteKey(note: Notes, octave: Octaves) {
     const { keyboard } = this.props;
 
-    return (
-      <div
-        key={keyboard.id + '-' + note + octave}
-        className={'white-key'}
-        //onClick={() => keyboard.onClickKey(note, octave)}
-        onMouseEnter={() => keyboard.onMouseEnterKey(note, octave)}
-        onMouseLeave={() => keyboard.onMouseLeaveKey(note, octave)}
-        onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          e.preventDefault();
-          keyboard.onClickKey(note, octave);
-        }}
-      ></div>
-    );
+    return <WhiteKey keyboard={keyboard} note={note} octave={octave} />;
   }
 
   private renderWhiteBlackKeyPair(wNote: Notes, bNote: Notes, octave: Octaves) {
     const { keyboard } = this.props;
 
-    return (
-      <div className={'key-pair'} key={keyboard.id + '-' + bNote + octave}>
-        {this.renderWhiteKey(wNote, octave)}
-        <div
-          className={'black-key'}
-          onMouseEnter={() => keyboard.onMouseEnterKey(bNote, octave)}
-          onMouseLeave={() => keyboard.onMouseLeaveKey(bNote, octave)}
-          onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            e.preventDefault();
-            keyboard.onClickKey(bNote, octave);
-          }}
-        ></div>
-      </div>
-    );
+    return <WhiteBlackKeyPair keyboard={keyboard} wNote={wNote} bNote={bNote} octave={octave} />;
   }
 }

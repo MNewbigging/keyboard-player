@@ -2,7 +2,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import { KeyboardItem } from '../model/KeyboardItem';
-import { Keyboard } from './Keyboard';
+import { Keyboard } from './keyboard/Keyboard';
 
 import './keyboard-row.scss';
 

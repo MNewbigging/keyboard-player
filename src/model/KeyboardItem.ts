@@ -1,3 +1,4 @@
+import { observable } from 'mobx';
 import * as Tone from 'tone';
 import { mouseUtils } from '../utils/MouseUtils';
 
@@ -36,19 +37,24 @@ export class KeyboardItem {
   public firstNote = Notes.C;
   public firstOctave = Octaves.THREE;
   public octaves = 2;
-
+  @observable public keysPlaying: string[] = [];
   private polySynth = new Tone.PolySynth().toDestination();
-  private keysPlaying: string[] = [];
 
   constructor(id: string) {
     this.id = id;
   }
 
-  public onClickKey(note: Notes, octave: Octaves) {
-    console.log('clicked key: ' + note + octave);
+  public isKeyPlaying(note: Notes, octave: Octaves) {
+    const key = this.getKeyString(note, octave);
+    return this.keysPlaying.includes(key);
+  }
 
-    // Play this key
+  public onMouseDownKey(note: Notes, octave: Octaves) {
     this.playKey(note, octave);
+  }
+
+  public onMouseUpKey(note: Notes, octave: Octaves) {
+    this.stopPlayingKey(note, octave);
   }
 
   public onMouseEnterKey(note: Notes, octave: Octaves) {
@@ -58,12 +64,11 @@ export class KeyboardItem {
   }
 
   public onMouseLeaveKey(note: Notes, octave: Octaves) {
-    // Stop playing this key
     this.stopPlayingKey(note, octave);
   }
 
   public playKey(note: Notes, octave: Octaves) {
-    const key = `${note}${octave}`;
+    const key = this.getKeyString(note, octave);
     // Only play if not already playing
     if (!this.keysPlaying.includes(key)) {
       this.keysPlaying.push(key);
@@ -72,11 +77,15 @@ export class KeyboardItem {
   }
 
   private stopPlayingKey(note: Notes, octave: Octaves) {
-    const key = `${note}${octave}`;
+    const key = this.getKeyString(note, octave);
     // Can only stop if currently playing
     if (this.keysPlaying.includes(key)) {
       this.polySynth.triggerRelease(key);
       this.keysPlaying = this.keysPlaying.filter((k) => k !== key);
     }
+  }
+
+  private getKeyString(note: Notes, octave: Octaves) {
+    return `${note}${octave}`;
   }
 }
