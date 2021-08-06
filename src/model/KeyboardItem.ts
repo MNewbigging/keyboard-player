@@ -1,6 +1,8 @@
 import { observable } from 'mobx';
 import * as Tone from 'tone';
+import { KeyboardUtils } from '../utils/KeyboardUtils';
 import { mouseUtils } from '../utils/MouseUtils';
+import { Key } from './Key';
 
 export enum Notes {
   C = 'C',
@@ -37,11 +39,14 @@ export class KeyboardItem {
   public firstNote = Notes.C;
   public firstOctave = Octaves.THREE;
   public octaves = 2;
+  public keys: Key[] = [];
   @observable public keysPlaying: string[] = [];
   private polySynth = new Tone.PolySynth().toDestination();
 
   constructor(id: string) {
     this.id = id;
+
+    this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
   }
 
   public isKeyPlaying(note: Notes, octave: Octaves) {
