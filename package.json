@@ -17,18 +17,17 @@
   "author": "Matt",
   "license": "MIT",
   "dependencies": {
-    "@blueprintjs/select": "^3.13.7",
     "@types/react-color": "^3.0.4",
     "axios": "^0.19.2",
     "file-loader": "^6.1.0",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
-    "peer": "^0.6.1",
     "react": "^16.13.1",
     "react-color": "^2.18.1",
     "react-dom": "^16.13.1",
     "react-split-pane": "^0.1.92",
     "save-dev": "0.0.1-security",
+    "tone": "^14.7.77",
     "tslint": "^6.1.2"
   },
   "devDependencies": {
