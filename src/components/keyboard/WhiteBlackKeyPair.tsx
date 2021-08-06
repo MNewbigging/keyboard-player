@@ -19,7 +19,7 @@ export class WhiteBlackKeyPair extends React.Component<Props> {
     const playingClass = keyboard.isKeyPlaying(bNote, octave) ? 'playing' : '';
 
     return (
-      <div className={'key-pair'} key={keyboard.id + '-' + bNote + octave}>
+      <div className={'key-pair'}>
         <WhiteKey keyboard={keyboard} note={wNote} octave={octave} />
         <div
           className={'black-key ' + playingClass}

@@ -18,7 +18,6 @@ export class WhiteKey extends React.Component<Props> {
 
     return (
       <div
-        key={keyboard.id + '-' + note + octave}
         className={'white-key ' + playingClass}
         onMouseEnter={() => keyboard.onMouseEnterKey(note, octave)}
         onMouseLeave={() => keyboard.onMouseLeaveKey(note, octave)}

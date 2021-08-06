@@ -96,12 +96,27 @@ export class Keyboard extends React.Component<Props> {
   private renderWhiteKey(note: Notes, octave: Octaves) {
     const { keyboard } = this.props;
 
-    return <WhiteKey keyboard={keyboard} note={note} octave={octave} />;
+    return (
+      <WhiteKey
+        key={keyboard.id + '-' + note + octave}
+        keyboard={keyboard}
+        note={note}
+        octave={octave}
+      />
+    );
   }
 
   private renderWhiteBlackKeyPair(wNote: Notes, bNote: Notes, octave: Octaves) {
     const { keyboard } = this.props;
 
-    return <WhiteBlackKeyPair keyboard={keyboard} wNote={wNote} bNote={bNote} octave={octave} />;
+    return (
+      <WhiteBlackKeyPair
+        key={keyboard.id + '-' + bNote + octave}
+        keyboard={keyboard}
+        wNote={wNote}
+        bNote={bNote}
+        octave={octave}
+      />
+    );
   }
 }
