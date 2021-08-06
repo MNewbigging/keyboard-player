@@ -93,9 +93,13 @@ export class Keyboard extends React.Component<Props> {
       <div
         key={keyboard.id + '-' + note + octave}
         className={'white-key'}
-        onClick={() => keyboard.onClickKey(note, octave)}
+        //onClick={() => keyboard.onClickKey(note, octave)}
         onMouseEnter={() => keyboard.onMouseEnterKey(note, octave)}
         onMouseLeave={() => keyboard.onMouseLeaveKey(note, octave)}
+        onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+          e.preventDefault();
+          keyboard.onClickKey(note, octave);
+        }}
       ></div>
     );
   }
@@ -108,9 +112,12 @@ export class Keyboard extends React.Component<Props> {
         {this.renderWhiteKey(wNote, octave)}
         <div
           className={'black-key'}
-          onClick={() => keyboard.onClickKey(bNote, octave)}
           onMouseEnter={() => keyboard.onMouseEnterKey(bNote, octave)}
           onMouseLeave={() => keyboard.onMouseLeaveKey(bNote, octave)}
+          onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            e.preventDefault();
+            keyboard.onClickKey(bNote, octave);
+          }}
         ></div>
       </div>
     );

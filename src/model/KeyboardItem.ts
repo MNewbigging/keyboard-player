@@ -1,3 +1,6 @@
+import * as Tone from 'tone';
+import { mouseUtils } from '../utils/MouseUtils';
+
 export enum Notes {
   C = 'C',
   C_SHARP = 'C#',
@@ -32,7 +35,10 @@ export class KeyboardItem {
   public id: string;
   public firstNote = Notes.C;
   public firstOctave = Octaves.THREE;
-  public octaves = 3;
+  public octaves = 2;
+
+  private polySynth = new Tone.PolySynth().toDestination();
+  private keysPlaying: string[] = [];
 
   constructor(id: string) {
     this.id = id;
@@ -40,15 +46,37 @@ export class KeyboardItem {
 
   public onClickKey(note: Notes, octave: Octaves) {
     console.log('clicked key: ' + note + octave);
+
+    // Play this key
+    this.playKey(note, octave);
   }
 
   public onMouseEnterKey(note: Notes, octave: Octaves) {
-    //
+    if (mouseUtils.mousedown) {
+      this.playKey(note, octave);
+    }
   }
 
   public onMouseLeaveKey(note: Notes, octave: Octaves) {
-    //
+    // Stop playing this key
+    this.stopPlayingKey(note, octave);
   }
 
-  public playKey(note: Notes, octave: Octaves) {}
+  public playKey(note: Notes, octave: Octaves) {
+    const key = `${note}${octave}`;
+    // Only play if not already playing
+    if (!this.keysPlaying.includes(key)) {
+      this.keysPlaying.push(key);
+      this.polySynth.triggerAttack(key);
+    }
+  }
+
+  private stopPlayingKey(note: Notes, octave: Octaves) {
+    const key = `${note}${octave}`;
+    // Can only stop if currently playing
+    if (this.keysPlaying.includes(key)) {
+      this.polySynth.triggerRelease(key);
+      this.keysPlaying = this.keysPlaying.filter((k) => k !== key);
+    }
+  }
 }
