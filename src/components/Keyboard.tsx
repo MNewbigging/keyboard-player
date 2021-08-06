@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { KeyboardItem, Notes } from '../model/KeyboardItem';
+import { KeyboardItem, Notes, octaves, Octaves, whiteNotes } from '../model/KeyboardItem';
 
 import './keyboard.scss';
 
@@ -27,52 +27,91 @@ export class Keyboard extends React.Component<Props> {
 
     const keys: JSX.Element[] = [];
 
-    // 12 notes to an octave
-    const totalNotes = keyboard.octaves * 12;
-    const notes = Object.values(Notes);
-    console.log('notes: ', notes);
+    // Get the starting octave for this keyboard
+    let currentOctave: number = octaves.indexOf(keyboard.firstOctave);
 
-    let currentNote: number = notes.indexOf(keyboard.firstNote);
-    for (let i = 0; i < totalNotes; i++) {
-      const note = notes[currentNote];
-      const key = this.getKey(note);
-      keys.push(key);
+    // Get the starting note for this keyboard
+    let currentWhiteNote: number = whiteNotes.indexOf(keyboard.firstNote);
 
-      currentNote++;
-      if (currentNote === notes.length) {
-        currentNote = 0;
+    // For all the octaves on this keyboard...
+    for (let o = 0; o < keyboard.octaves; o++) {
+      // Go through all white notes for this octave
+      for (let n = 0; n < whiteNotes.length; n++) {
+        // Get the key for this note (plus black key for certain white notes)
+        const key = this.getKeys(currentWhiteNote, currentOctave);
+        keys.push(key);
+
+        // Move to next white note
+        currentWhiteNote++;
+        if (currentWhiteNote === whiteNotes.length) {
+          currentWhiteNote = 0;
+        }
+      }
+
+      // Move to next octave
+      currentOctave++;
+      if (currentOctave === octaves.length) {
+        currentOctave = 0;
       }
     }
 
     // Add final key
-    const lastKey = this.renderWhiteKey();
+    const lastKey = this.renderWhiteKey(whiteNotes[currentWhiteNote], octaves[currentOctave]);
     keys.push(lastKey);
 
     return keys;
   }
 
-  private getKey(note: Notes) {
-    switch (note) {
+  private getKeys(note: number, octave: number) {
+    // Get the current octave
+    const curOctave = octaves[octave];
+
+    // Get the current white note
+    const curWhiteNote = whiteNotes[note];
+
+    switch (curWhiteNote) {
       case Notes.C:
+        return this.renderWhiteBlackKeyPair(curWhiteNote, Notes.C_SHARP, curOctave);
       case Notes.D:
+        return this.renderWhiteBlackKeyPair(curWhiteNote, Notes.D_SHARP, curOctave);
       case Notes.F:
+        return this.renderWhiteBlackKeyPair(curWhiteNote, Notes.F_SHARP, curOctave);
       case Notes.G:
+        return this.renderWhiteBlackKeyPair(curWhiteNote, Notes.G_SHARP, curOctave);
       case Notes.A:
-        return this.renderWhiteBlackKeyPair();
+        return this.renderWhiteBlackKeyPair(curWhiteNote, Notes.A_SHARP, curOctave);
       case Notes.E:
       case Notes.B:
-        return this.renderWhiteKey();
+        return this.renderWhiteKey(curWhiteNote, curOctave);
     }
   }
 
-  private renderWhiteKey() {
-    return <div className={'white-key'}></div>;
-  }
-  private renderWhiteBlackKeyPair() {
+  private renderWhiteKey(note: Notes, octave: Octaves) {
+    const { keyboard } = this.props;
+
     return (
-      <div className={'key-pair'}>
-        <div className={'white-key'}></div>
-        <div className={'black-key'}></div>
+      <div
+        key={keyboard.id + '-' + note + octave}
+        className={'white-key'}
+        onClick={() => keyboard.onClickKey(note, octave)}
+        onMouseEnter={() => keyboard.onMouseEnterKey(note, octave)}
+        onMouseLeave={() => keyboard.onMouseLeaveKey(note, octave)}
+      ></div>
+    );
+  }
+
+  private renderWhiteBlackKeyPair(wNote: Notes, bNote: Notes, octave: Octaves) {
+    const { keyboard } = this.props;
+
+    return (
+      <div className={'key-pair'} key={keyboard.id + '-' + bNote + octave}>
+        {this.renderWhiteKey(wNote, octave)}
+        <div
+          className={'black-key'}
+          onClick={() => keyboard.onClickKey(bNote, octave)}
+          onMouseEnter={() => keyboard.onMouseEnterKey(bNote, octave)}
+          onMouseLeave={() => keyboard.onMouseLeaveKey(bNote, octave)}
+        ></div>
       </div>
     );
   }
