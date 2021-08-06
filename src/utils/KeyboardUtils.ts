@@ -1,9 +1,24 @@
-import { Key } from '../model/Key';
-import { Octaves, Notes, octaves, whiteNotes, allNotes } from '../model/KeyboardItem';
+import { Key, KeyType } from '../model/Key';
+import { Octaves, Notes, octaves, allNotes } from '../model/KeyboardItem';
 
 export class KeyboardUtils {
   public static getKeyName(note: Notes, octave: Octaves) {
     return `${note}${octave}`;
+  }
+
+  public static getKeyType(note: Notes) {
+    switch (note) {
+      case Notes.C:
+      case Notes.D:
+      case Notes.E:
+      case Notes.F:
+      case Notes.G:
+      case Notes.A:
+      case Notes.B:
+        return KeyType.WHITE;
+      default:
+        return KeyType.BLACK;
+    }
   }
 
   public static generateKeys(firstNote: Notes, firstOctave: Octaves, numOctaves: number) {

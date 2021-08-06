@@ -47,6 +47,7 @@ export class KeyboardItem {
     this.id = id;
 
     this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
+    console.log('keys', this.keys);
   }
 
   public isKeyPlaying(note: Notes, octave: Octaves) {
