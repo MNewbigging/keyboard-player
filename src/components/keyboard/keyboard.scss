@@ -1,12 +1,16 @@
-$whiteKeyWidth: 30px;
-$blackKeyWidth: 25px;
+$keysHeight: 120px;
+
+$whiteKeyWidth: 28px;
+
+$blackKeyWidth: 22px;
+$blackKeyOffset: 11px;
 $blackKeyHeight: 60%;
 
 .keyboard {
   flex-grow: 0;
   flex-shrink: 0;
   // width: min-content;
-  height: 240px;
+  height: 200px;
   border: 1px solid black;
   box-sizing: border-box;
   margin-left: 20px;
@@ -14,12 +18,17 @@ $blackKeyHeight: 60%;
   display: grid;
   grid-template-areas:
     'top top top'
+    '.. hk ..'
     'left keys right';
-  grid-template-rows: minmax(0, 1fr) minmax(0, 3fr);
+  grid-template-rows: minmax(0, auto) min-content minmax(0, $keysHeight);
   grid-template-columns: minmax(0, 50px) min-content minmax(0, 50px);
 
   .top-row {
     grid-area: top;
+  }
+
+  .hotkeys-row {
+    grid-area: hk;
   }
 
   .left-side {
@@ -58,7 +67,7 @@ $blackKeyHeight: 60%;
       z-index: 10;
       position: absolute;
       top: 0;
-      left: 17px;
+      right: -$blackKeyOffset;
       width: $blackKeyWidth;
       height: $blackKeyHeight;
       background-color: black;

@@ -4,6 +4,7 @@ import React from 'react';
 import { KeyboardItem, Notes, octaves, Octaves, whiteNotes } from '../../model/KeyboardItem';
 
 import './keyboard.scss';
+import { KeyboardHotkeysRow } from './KeyboardHotKeysRow';
 import { KeyboardTopControls } from './KeyboardTopControls';
 import { WhiteBlackKeyPair } from './WhiteBlackKeyPair';
 import { WhiteKey } from './WhiteKey';
@@ -21,6 +22,9 @@ export class Keyboard extends React.Component<Props> {
       <div className={'keyboard'}>
         <div className={'top-row'}>
           <KeyboardTopControls keyboard={keyboard} />
+        </div>
+        <div className={'hotkeys-row'}>
+          <KeyboardHotkeysRow />
         </div>
         <div className={'left-side'}></div>
         <div className={'keys-area'}>{this.renderKeys()}</div>
