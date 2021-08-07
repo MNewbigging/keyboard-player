@@ -49,7 +49,7 @@ export class KeyboardItem {
   constructor(id: string) {
     this.id = id;
     this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
-
+    console.log('keys', this.keys);
     hotkeyManager.addKeyDownListener(this.onHotkeyPress);
     hotkeyManager.addKeyUpListener(this.onHotkeyRelease);
   }

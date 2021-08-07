@@ -25,36 +25,43 @@ export class KeyboardUtils {
     const keys: Key[] = [];
 
     // Current octave
-    let curOctave: number = octaves.indexOf(firstOctave);
+    let octaveIdx: number = octaves.indexOf(firstOctave);
+    let curOctave = octaves[octaveIdx];
 
     // Current note
-    let curNote: number = allNotes.indexOf(firstNote);
+    let noteIdx: number = allNotes.indexOf(firstNote);
 
-    // For each octave
-    for (let o = 0; o < numOctaves; o++) {
-      const octave = octaves[curOctave];
+    // Total keys to add
+    const totalKeys = numOctaves * 12;
 
-      // For each note
-      for (let n = 0; n < allNotes.length; n++) {
-        const note = allNotes[curNote];
+    for (let i = 0; i < totalKeys; i++) {
+      // Get the next note and octave
+      const curNote = allNotes[noteIdx];
+      curOctave = octaves[octaveIdx];
 
-        keys.push(new Key(note, octave));
+      // Create a key for it with current octave
+      keys.push(new Key(curNote, curOctave));
 
-        curNote++;
-        if (curNote === allNotes.length) {
-          curNote = 0;
-        }
+      // Increase the note
+      noteIdx++;
+      // Loop around if at end of all notes array
+      if (noteIdx === allNotes.length) {
+        noteIdx = 0;
       }
 
-      curOctave++;
-      if (curOctave === octaves.length) {
-        // Don't loop around octaves; stop here
-        break;
+      // Check if we've moved to next octave
+      if (allNotes[noteIdx] === Notes.C) {
+        octaveIdx++;
+
+        // Cannot exceed max octaves supported
+        if (octaveIdx === octaves.length) {
+          return keys;
+        }
       }
     }
 
     // Another note of the first note type at last octave
-    keys.push(new Key(firstNote, octaves[curOctave]));
+    keys.push(new Key(firstNote, octaves[octaveIdx]));
 
     return keys;
   }
