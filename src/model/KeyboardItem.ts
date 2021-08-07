@@ -38,11 +38,12 @@ export const octaves: Octaves[] = Object.values(Octaves);
 
 export class KeyboardItem {
   public id: string;
-  public firstNote = Notes.C;
+  public firstNote = Notes.G;
   public firstOctave = Octaves.THREE;
   public octaves = 2;
   public keys: Key[] = [];
   @observable public keysPlaying: string[] = [];
+  @observable public hotkeys = new Map<string, Key[]>();
   private polySynth = new Tone.PolySynth().toDestination();
 
   constructor(id: string) {

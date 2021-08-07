@@ -1,7 +1,40 @@
-.hotkeys-row {
-  height: 30px;
+.hotkeys-container {
+  height: 40px;
   width: 100%;
 
   border: 1px solid blue;
   box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  .hotkey-row {
+    display: flex;
+    align-items: center;
+
+    &.black {
+      padding-left: 15px;
+    }
+  }
+
+  .hotkey-box {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    box-sizing: border-box;
+
+    &.black {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    &.white {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+  }
+
+  .hotkey-spacer {
+    width: 30px;
+  }
 }
