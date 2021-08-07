@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { KeyType } from '../../model/Key';
 
+import { KeyboardKey } from '../../model/KeyboardKey';
 import { KeyboardItem, Notes } from '../../model/KeyboardItem';
 
 import './keyboard-hotkeys-row.scss';
@@ -13,8 +13,6 @@ interface Props {
 @observer
 export class KeyboardHotkeysRow extends React.Component<Props> {
   public render() {
-    const { keyboard } = this.props;
-
     return <div className={'hotkeys-container'}>{this.renderHotkeyBoxes()}</div>;
   }
 
@@ -35,31 +33,50 @@ export class KeyboardHotkeysRow extends React.Component<Props> {
         case Notes.F:
         case Notes.G:
         case Notes.A:
-          whiteRow.push(<div className={'hotkey-box white'}></div>);
+          whiteRow.push(this.renderHotkeyBox(key));
           break;
         case Notes.E:
         case Notes.B:
-          whiteRow.push(<div className={'hotkey-box white'}></div>);
-          blackRow.push(<div className={'hotkey-spacer'}></div>);
+          whiteRow.push(this.renderHotkeyBox(key));
+          blackRow.push(<div key={`hks-${keyboard.id}-${k}`} className={'hotkey-spacer'}></div>);
           break;
         case Notes.C_SHARP:
         case Notes.D_SHARP:
         case Notes.F_SHARP:
         case Notes.G_SHARP:
         case Notes.A_SHARP:
-          blackRow.push(<div className={'hotkey-box black'}></div>);
+          blackRow.push(this.renderHotkeyBox(key));
           break;
       }
     }
 
     // Last is always a white note
-    whiteRow.push(<div className={'hotkey-box white'}></div>);
+    const lastKey = keyboard.keys[keyboard.keys.length - 1];
+    whiteRow.push(this.renderHotkeyBox(lastKey));
 
     return (
       <>
         <div className={'hotkey-row black'}>{blackRow}</div>
         <div className={'hotkey-row'}>{whiteRow}</div>
       </>
+    );
+  }
+
+  private renderHotkeyBox(key: KeyboardKey) {
+    const { keyboard } = this.props;
+
+    return (
+      <div
+        key={`hk-${keyboard.id}-${key.name}`}
+        className={'hotkey-box ' + key.type}
+        onClick={() => keyboard.startAssignHotkey(key)}
+        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => {
+          e.preventDefault();
+          keyboard.clearHotkey(key);
+        }}
+      >
+        {key.hotkey}
+      </div>
     );
   }
 }

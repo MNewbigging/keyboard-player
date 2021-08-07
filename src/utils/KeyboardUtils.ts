@@ -1,4 +1,4 @@
-import { Key, KeyType } from '../model/Key';
+import { KeyboardKey, KeyType } from '../model/KeyboardKey';
 import { Octaves, Notes, octaves, allNotes } from '../model/KeyboardItem';
 
 export class KeyboardUtils {
@@ -22,7 +22,7 @@ export class KeyboardUtils {
   }
 
   public static generateKeys(firstNote: Notes, firstOctave: Octaves, numOctaves: number) {
-    const keys: Key[] = [];
+    const keys: KeyboardKey[] = [];
 
     // Current octave
     let octaveIdx: number = octaves.indexOf(firstOctave);
@@ -40,7 +40,7 @@ export class KeyboardUtils {
       curOctave = octaves[octaveIdx];
 
       // Create a key for it with current octave
-      keys.push(new Key(curNote, curOctave));
+      keys.push(new KeyboardKey(curNote, curOctave));
 
       // Increase the note
       noteIdx++;
@@ -61,7 +61,7 @@ export class KeyboardUtils {
     }
 
     // Another note of the first note type at last octave
-    keys.push(new Key(firstNote, octaves[octaveIdx]));
+    keys.push(new KeyboardKey(firstNote, octaves[octaveIdx]));
 
     return keys;
   }

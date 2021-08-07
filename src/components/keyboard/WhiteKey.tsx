@@ -1,31 +1,31 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { KeyboardItem, Octaves, Notes } from '../../model/KeyboardItem';
+import { KeyboardKey } from '../../model/KeyboardKey';
+import { KeyboardItem } from '../../model/KeyboardItem';
 
 interface Props {
   keyboard: KeyboardItem;
-  note: Notes;
-  octave: Octaves;
+  keyboardKey: KeyboardKey;
 }
 
 @observer
 export class WhiteKey extends React.Component<Props> {
   public render() {
-    const { keyboard, note, octave } = this.props;
+    const { keyboard, keyboardKey } = this.props;
 
-    const playingClass = keyboard.isKeyPlaying(note, octave) ? 'playing' : '';
+    const playingClass = keyboard.isKeyPlaying(keyboardKey) ? 'playing' : '';
 
     return (
       <div
         className={'white-key ' + playingClass}
-        onMouseEnter={() => keyboard.onMouseEnterKey(note, octave)}
-        onMouseLeave={() => keyboard.onMouseLeaveKey(note, octave)}
+        onMouseEnter={() => keyboard.onMouseEnterKey(keyboardKey)}
+        onMouseLeave={() => keyboard.onMouseLeaveKey(keyboardKey)}
         onMouseDown={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
           e.preventDefault();
-          keyboard.onMouseDownKey(note, octave);
+          keyboard.onMouseDownKey(keyboardKey);
         }}
-        onMouseUp={() => keyboard.onMouseUpKey(note, octave)}
+        onMouseUp={() => keyboard.onMouseUpKey(keyboardKey)}
       ></div>
     );
   }

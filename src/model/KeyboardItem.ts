@@ -1,10 +1,10 @@
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
 import * as Tone from 'tone';
-import { hotkeyManager } from '../utils/HotKeyManager';
 
+import { hotkeyManager } from '../utils/HotKeyManager';
 import { KeyboardUtils } from '../utils/KeyboardUtils';
 import { mouseUtils } from '../utils/MouseUtils';
-import { Key } from './Key';
+import { KeyboardKey } from './KeyboardKey';
 
 export enum Notes {
   C = 'C',
@@ -38,72 +38,129 @@ export const octaves: Octaves[] = Object.values(Octaves);
 
 export class KeyboardItem {
   public id: string;
-  public firstNote = Notes.G;
+  public firstNote = Notes.C;
   public firstOctave = Octaves.THREE;
   public octaves = 2;
-  public keys: Key[] = [];
+  public keys: KeyboardKey[] = [];
   @observable public keysPlaying: string[] = [];
-  @observable public hotkeys = new Map<string, Key[]>();
+  @observable public hotkeys = new Map<string, KeyboardKey[]>();
+  @observable public hotkeyAssignKey?: KeyboardKey;
   private polySynth = new Tone.PolySynth().toDestination();
 
   constructor(id: string) {
     this.id = id;
     this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
-    console.log('keys', this.keys);
+
     hotkeyManager.addKeyDownListener(this.onHotkeyPress);
     hotkeyManager.addKeyUpListener(this.onHotkeyRelease);
   }
 
-  public isKeyPlaying(note: Notes, octave: Octaves) {
-    const key = this.getKeyString(note, octave);
-    return this.keysPlaying.includes(key);
+  public isKeyPlaying(key: KeyboardKey) {
+    return this.keysPlaying.includes(key.name);
   }
 
-  public onMouseDownKey(note: Notes, octave: Octaves) {
-    this.playKey(note, octave);
+  public onMouseDownKey(key: KeyboardKey) {
+    this.playKey(key);
   }
 
-  public onMouseUpKey(note: Notes, octave: Octaves) {
-    this.stopPlayingKey(note, octave);
+  public onMouseUpKey(key: KeyboardKey) {
+    this.stopPlayingKey(key);
   }
 
-  public onMouseEnterKey(note: Notes, octave: Octaves) {
+  public onMouseEnterKey(key: KeyboardKey) {
     if (mouseUtils.mousedown) {
-      this.playKey(note, octave);
+      this.playKey(key);
     }
   }
 
-  public onMouseLeaveKey(note: Notes, octave: Octaves) {
-    this.stopPlayingKey(note, octave);
+  public onMouseLeaveKey(key: KeyboardKey) {
+    this.stopPlayingKey(key);
   }
 
-  private readonly onHotkeyPress = (key: string) => {
-    console.log('hotkey press: ' + key);
+  @action public readonly startAssignHotkey = (key: KeyboardKey) => {
+    console.log('clicked hotkey');
+
+    // We are now listening for a hotkey press
+    this.hotkeyAssignKey = key;
   };
 
-  private readonly onHotkeyRelease = (key: string) => {
-    console.log('hotkey release: ' + key);
+  public readonly clearHotkey = (hotkey: KeyboardKey) => {
+    console.log('clear hotkey');
+
+    // If this key has no hotkeys to clear, stop
+    if (!hotkey.hotkey) {
+      return;
+    }
+
+    // Otherwise, get the current keys for this hotkey
+    let curKeys: KeyboardKey[] = this.hotkeys.get(hotkey.hotkey);
+    if (curKeys?.length) {
+      // Filter out the key being removed for this hotkey
+      curKeys = curKeys.filter((k) => k.name !== hotkey.name);
+      // Set the new keys against this hotkey
+      this.hotkeys.set(hotkey.hotkey, curKeys);
+    }
+
+    // Then clear the hotkey from the key itself
+    hotkey.clearHotkey();
   };
 
-  private playKey(note: Notes, octave: Octaves) {
-    const key = this.getKeyString(note, octave);
+  private readonly onHotkeyPress = (hotkey: string) => {
+    console.log('hotkey press: ' + hotkey);
+
+    // First check if we're listening to assign a new hotkey
+    if (this.hotkeyAssignKey) {
+      // If so, assign that hotkey to the note
+      this.assignHotkey(hotkey);
+    } else {
+      // Otherwise, get the notes to play for this hotkey and play them
+      const keys = this.hotkeys.get(hotkey);
+      if (keys?.length) {
+        keys.forEach((key) => this.playKey(key));
+      }
+    }
+  };
+
+  private readonly onHotkeyRelease = (hotkey: string) => {
+    console.log('hotkey release: ' + hotkey);
+
+    // Stop playing any sounds that might be playing from pressing this hotkey
+    const keys = this.hotkeys.get(hotkey) ?? [];
+    if (keys.length) {
+      keys.forEach((key) => this.stopPlayingKey(key));
+    }
+  };
+
+  @action private assignHotkey(hotkey: string) {
+    if (!this.hotkeyAssignKey) {
+      return;
+    }
+
+    // Assign hotkey to the key for display
+    this.hotkeyAssignKey.setHotkey(hotkey);
+
+    // Add it to map for playing via hotkey
+    const curKeys = this.hotkeys.get(hotkey) ?? [];
+    curKeys.push(this.hotkeyAssignKey);
+    this.hotkeys.set(hotkey, curKeys);
+
+    // No longer listening for assigning hotkey
+    this.hotkeyAssignKey = undefined;
+  }
+
+  private playKey(key: KeyboardKey) {
     // Only play if not already playing
-    if (!this.keysPlaying.includes(key)) {
-      this.keysPlaying.push(key);
-      this.polySynth.triggerAttack(key);
+    if (!this.keysPlaying.includes(key.name)) {
+      this.keysPlaying.push(key.name);
+      this.polySynth.triggerAttack(key.name);
     }
   }
 
-  private stopPlayingKey(note: Notes, octave: Octaves) {
-    const key = this.getKeyString(note, octave);
+  private stopPlayingKey(key: KeyboardKey) {
     // Can only stop if currently playing
-    if (this.keysPlaying.includes(key)) {
-      this.polySynth.triggerRelease(key);
-      this.keysPlaying = this.keysPlaying.filter((k) => k !== key);
+    if (this.keysPlaying.includes(key.name)) {
+      this.polySynth.triggerRelease(key.name);
+      this.keysPlaying = this.keysPlaying.filter((k) => k !== key.name);
     }
-  }
-
-  private getKeyString(note: Notes, octave: Octaves) {
-    return `${note}${octave}`;
   }
 }

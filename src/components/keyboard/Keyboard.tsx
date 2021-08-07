@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { Key, KeyType } from '../../model/Key';
+import { KeyboardKey, KeyType } from '../../model/KeyboardKey';
 import { KeyboardItem, Notes, Octaves } from '../../model/KeyboardItem';
 import { KeyboardHotkeysRow } from './KeyboardHotKeysRow';
 import { KeyboardTopControls } from './KeyboardTopControls';
@@ -39,62 +39,49 @@ export class Keyboard extends React.Component<Props> {
 
     const keys: JSX.Element[] = [];
 
-    // Since black and white keys are rendered in pairs, just need all white keys
-    const whiteKeys = keyboard.keys.filter((key) => key.type === KeyType.WHITE);
-
-    // Render all but last as potential pairs
-    for (let i = 0; i < whiteKeys.length - 1; i++) {
-      keys.push(this.renderKey(whiteKeys[i]));
-    }
+    keyboard.keys.forEach((key, idx) => {
+      switch (key.note) {
+        // B and E have white keys after them
+        case Notes.B:
+        case Notes.E:
+          keys.push(this.renderWhiteKey(key));
+          break;
+        // All other white keys have black keys after them
+        case Notes.C:
+        case Notes.D:
+        case Notes.F:
+        case Notes.G:
+        case Notes.A:
+          if (idx + 1 < keyboard.keys.length) {
+            const blackKey = keyboard.keys[idx + 1];
+            keys.push(this.renderWhiteBlackKeyPair(key, blackKey));
+          }
+          break;
+      }
+    });
 
     // Last item never a pair; always a white note
-    const lastKey = whiteKeys[whiteKeys.length - 1];
-    keys.push(this.renderWhiteKey(lastKey.note, lastKey.octave));
+    const lastKey = keyboard.keys[keyboard.keys.length - 1];
+    keys.push(this.renderWhiteKey(lastKey));
 
     return keys;
   }
 
-  private renderKey(key: Key) {
-    switch (key.note) {
-      case Notes.C:
-        return this.renderWhiteBlackKeyPair(key.note, Notes.C_SHARP, key.octave);
-      case Notes.D:
-        return this.renderWhiteBlackKeyPair(key.note, Notes.D_SHARP, key.octave);
-      case Notes.F:
-        return this.renderWhiteBlackKeyPair(key.note, Notes.F_SHARP, key.octave);
-      case Notes.G:
-        return this.renderWhiteBlackKeyPair(key.note, Notes.G_SHARP, key.octave);
-      case Notes.A:
-        return this.renderWhiteBlackKeyPair(key.note, Notes.A_SHARP, key.octave);
-      case Notes.E:
-      case Notes.B:
-        return this.renderWhiteKey(key.note, key.octave);
-    }
-  }
-
-  private renderWhiteKey(note: Notes, octave: Octaves) {
+  private renderWhiteKey(key: KeyboardKey) {
     const { keyboard } = this.props;
 
-    return (
-      <WhiteKey
-        key={keyboard.id + '-' + note + octave}
-        keyboard={keyboard}
-        note={note}
-        octave={octave}
-      />
-    );
+    return <WhiteKey key={`${keyboard.id}-${key.name}`} keyboard={keyboard} keyboardKey={key} />;
   }
 
-  private renderWhiteBlackKeyPair(wNote: Notes, bNote: Notes, octave: Octaves) {
+  private renderWhiteBlackKeyPair(wKey: KeyboardKey, bKey: KeyboardKey) {
     const { keyboard } = this.props;
 
     return (
       <WhiteBlackKeyPair
-        key={keyboard.id + '-' + bNote + octave}
+        key={`${keyboard.id}-${bKey.name}`}
         keyboard={keyboard}
-        wNote={wNote}
-        bNote={bNote}
-        octave={octave}
+        wKey={wKey}
+        bKey={bKey}
       />
     );
   }

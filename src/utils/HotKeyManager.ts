@@ -33,6 +33,7 @@ class HotkeyManager {
   private onKeyUp = (e: KeyboardEvent) => {
     this.pressedKeys = this.pressedKeys.filter((key) => key !== e.key);
     this.keyUpListeners.forEach((cb) => cb(e.key));
+    this.lastPressedKey = '';
   };
 }
 
