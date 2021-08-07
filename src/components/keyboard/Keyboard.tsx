@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { KeyboardKey, KeyType } from '../../model/KeyboardKey';
-import { KeyboardItem, Notes, Octaves } from '../../model/KeyboardItem';
+import { KeyboardKey } from '../../model/KeyboardKey';
+import { KeyboardItem, Notes } from '../../model/KeyboardItem';
 import { KeyboardHotkeysRow } from './KeyboardHotKeysRow';
 import { KeyboardTopControls } from './KeyboardTopControls';
 import { WhiteBlackKeyPair } from './WhiteBlackKeyPair';

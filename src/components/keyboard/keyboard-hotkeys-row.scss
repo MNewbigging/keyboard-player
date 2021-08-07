@@ -2,9 +2,6 @@
   height: 40px;
   width: 100%;
 
-  border: 1px solid blue;
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
 
@@ -23,6 +20,10 @@
     border: 1px solid black;
     box-sizing: border-box;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     &.black {
       margin-left: 5px;
       margin-right: 5px;
@@ -31,6 +32,10 @@
     &.white {
       margin-left: 5px;
       margin-right: 5px;
+    }
+
+    &.listening {
+      box-shadow: inset 0px 0px 2px 2px rgba($color: #658bf1, $alpha: 0.75);
     }
   }
 

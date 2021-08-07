@@ -78,15 +78,11 @@ export class KeyboardItem {
   }
 
   @action public readonly startAssignHotkey = (key: KeyboardKey) => {
-    console.log('clicked hotkey');
-
     // We are now listening for a hotkey press
     this.hotkeyAssignKey = key;
   };
 
   public readonly clearHotkey = (hotkey: KeyboardKey) => {
-    console.log('clear hotkey');
-
     // If this key has no hotkeys to clear, stop
     if (!hotkey.hotkey) {
       return;
@@ -106,8 +102,6 @@ export class KeyboardItem {
   };
 
   private readonly onHotkeyPress = (hotkey: string) => {
-    console.log('hotkey press: ' + hotkey);
-
     // First check if we're listening to assign a new hotkey
     if (this.hotkeyAssignKey) {
       // If so, assign that hotkey to the note
@@ -122,8 +116,6 @@ export class KeyboardItem {
   };
 
   private readonly onHotkeyRelease = (hotkey: string) => {
-    console.log('hotkey release: ' + hotkey);
-
     // Stop playing any sounds that might be playing from pressing this hotkey
     const keys = this.hotkeys.get(hotkey) ?? [];
     if (keys.length) {
@@ -133,6 +125,11 @@ export class KeyboardItem {
 
   @action private assignHotkey(hotkey: string) {
     if (!this.hotkeyAssignKey) {
+      return;
+    }
+
+    // Only allowed hotkeys are single character keys
+    if (hotkey.length !== 1 || hotkey === ' ') {
       return;
     }
 

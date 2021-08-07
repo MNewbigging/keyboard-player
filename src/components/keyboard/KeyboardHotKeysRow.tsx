@@ -65,10 +65,13 @@ export class KeyboardHotkeysRow extends React.Component<Props> {
   private renderHotkeyBox(key: KeyboardKey) {
     const { keyboard } = this.props;
 
+    const listening = keyboard.hotkeyAssignKey?.name === key.name ? 'listening' : '';
+    const classes = ['hotkey-box', key.type, listening];
+
     return (
       <div
         key={`hk-${keyboard.id}-${key.name}`}
-        className={'hotkey-box ' + key.type}
+        className={classes.join(' ')}
         onClick={() => keyboard.startAssignHotkey(key)}
         onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => {
           e.preventDefault();
