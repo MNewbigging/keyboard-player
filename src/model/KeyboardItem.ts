@@ -1,5 +1,7 @@
 import { observable } from 'mobx';
 import * as Tone from 'tone';
+import { hotkeyManager } from '../utils/HotKeyManager';
+
 import { KeyboardUtils } from '../utils/KeyboardUtils';
 import { mouseUtils } from '../utils/MouseUtils';
 import { Key } from './Key';
@@ -45,9 +47,10 @@ export class KeyboardItem {
 
   constructor(id: string) {
     this.id = id;
-
     this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
-    console.log('keys', this.keys);
+
+    hotkeyManager.addKeyDownListener(this.onHotkeyPress);
+    hotkeyManager.addKeyUpListener(this.onHotkeyRelease);
   }
 
   public isKeyPlaying(note: Notes, octave: Octaves) {
@@ -73,7 +76,15 @@ export class KeyboardItem {
     this.stopPlayingKey(note, octave);
   }
 
-  public playKey(note: Notes, octave: Octaves) {
+  private readonly onHotkeyPress = (key: string) => {
+    console.log('hotkey press: ' + key);
+  };
+
+  private readonly onHotkeyRelease = (key: string) => {
+    console.log('hotkey release: ' + key);
+  };
+
+  private playKey(note: Notes, octave: Octaves) {
     const key = this.getKeyString(note, octave);
     // Only play if not already playing
     if (!this.keysPlaying.includes(key)) {
