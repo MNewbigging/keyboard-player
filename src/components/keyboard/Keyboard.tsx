@@ -24,6 +24,9 @@ export class Keyboard extends React.Component<Props> {
         <div className={'top-row'}>
           <KeyboardTopControls keyboard={keyboard} />
         </div>
+        <div className={'clear-hk'}>
+          <div className={'keyboard-button square'}>CLEAR HKS</div>
+        </div>
         <div className={'hotkeys-row'}>
           <KeyboardHotkeysRow keyboard={keyboard} />
         </div>

@@ -18,13 +18,22 @@ $blackKeyHeight: 60%;
   display: grid;
   grid-template-areas:
     'top top top'
-    '.. hk ..'
+    'clear-hk hk ..'
     'left keys right';
   grid-template-rows: minmax(0, auto) min-content minmax(0, $keysHeight);
   grid-template-columns: minmax(0, 50px) min-content minmax(0, 50px);
 
   .top-row {
     grid-area: top;
+  }
+
+  .clear-hk {
+    grid-area: clear-hk;
+    padding: 3px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .hotkeys-row {
@@ -77,5 +86,16 @@ $blackKeyHeight: 60%;
         background-color: grey;
       }
     }
+  }
+
+  .keyboard-button {
+    border: 1px solid black;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 10px;
   }
 }
