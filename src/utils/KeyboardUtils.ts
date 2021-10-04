@@ -21,6 +21,33 @@ export class KeyboardUtils {
     }
   }
 
+  public static getNoteFromString(note: string) {
+    switch (note) {
+      case 'C':
+        return Notes.C;
+      case 'C#':
+        return Notes.C_SHARP;
+      case 'D':
+        return Notes.D;
+      case 'D#':
+        return Notes.D_SHARP;
+      case 'E':
+        return Notes.E;
+      case 'F':
+        return Notes.F;
+      case 'F#':
+        return Notes.F_SHARP;
+      case 'G':
+        return Notes.G;
+      case 'G#':
+        return Notes.G_SHARP;
+      case 'A':
+        return Notes.A;
+      case 'A#':
+        return Notes.A_SHARP;
+    }
+  }
+
   public static generateKeys(firstNote: Notes, firstOctave: Octaves, numOctaves: number) {
     const keys: KeyboardKey[] = [];
 

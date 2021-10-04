@@ -21,7 +21,7 @@ $blackKeyHeight: 60%;
     'clear-hk hk ..'
     'left keys right';
   grid-template-rows: minmax(0, auto) min-content minmax(0, $keysHeight);
-  grid-template-columns: minmax(0, 50px) min-content minmax(0, 50px);
+  grid-template-columns: minmax(0, 60px) min-content minmax(0, 60px);
 
   .top-row {
     grid-area: top;
@@ -91,6 +91,8 @@ $blackKeyHeight: 60%;
   .keyboard-button {
     border: 1px solid black;
     box-sizing: border-box;
+    user-select: none;
+    cursor: pointer;
 
     display: flex;
     justify-content: center;

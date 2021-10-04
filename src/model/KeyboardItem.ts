@@ -38,10 +38,10 @@ export const octaves: Octaves[] = Object.values(Octaves);
 
 export class KeyboardItem {
   public id: string;
-  public firstNote = Notes.C;
+  @observable public firstNote = Notes.C;
   public firstOctave = Octaves.THREE;
   public octaves = 2;
-  public keys: KeyboardKey[] = [];
+  @observable public keys: KeyboardKey[] = [];
   @observable public keysPlaying: string[] = [];
   @observable public hotkeys = new Map<string, KeyboardKey[]>();
   @observable public hotkeyAssignKey?: KeyboardKey;
@@ -57,6 +57,26 @@ export class KeyboardItem {
 
   public isKeyPlaying(key: KeyboardKey) {
     return this.keysPlaying.includes(key.name);
+  }
+
+  /**
+   * TODO
+   * - don't change the layout of an existing keyboard
+   * - on add, show dialog to choose start, octave etc
+   * - never change it after tha
+   *
+   */
+  @action public setStartKey(note: string) {
+    // Clear any hotkeys for the keyboard
+    this.clearAllHotkeys();
+
+    // Reverse-map string to enum
+    const noteValue = KeyboardUtils.getNoteFromString(note);
+
+    // Generate new keys based on given starting note
+    this.keys = KeyboardUtils.generateKeys(noteValue, this.firstOctave, this.octaves);
+
+    this.firstNote = noteValue;
   }
 
   public onMouseDownKey(key: KeyboardKey) {
@@ -82,23 +102,28 @@ export class KeyboardItem {
     this.hotkeyAssignKey = key;
   };
 
-  public readonly clearHotkey = (hotkey: KeyboardKey) => {
+  @action public readonly clearAllHotkeys = () => {
+    this.hotkeys.clear();
+    this.keys.forEach((key) => key.clearHotkey());
+  };
+
+  public readonly clearHotkey = (key: KeyboardKey) => {
     // If this key has no hotkeys to clear, stop
-    if (!hotkey.hotkey) {
+    if (!key.hotkey) {
       return;
     }
 
     // Otherwise, get the current keys for this hotkey
-    let curKeys: KeyboardKey[] = this.hotkeys.get(hotkey.hotkey);
+    let curKeys: KeyboardKey[] = this.hotkeys.get(key.hotkey);
     if (curKeys?.length) {
       // Filter out the key being removed for this hotkey
-      curKeys = curKeys.filter((k) => k.name !== hotkey.name);
+      curKeys = curKeys.filter((k) => k.name !== key.name);
       // Set the new keys against this hotkey
-      this.hotkeys.set(hotkey.hotkey, curKeys);
+      this.hotkeys.set(key.hotkey, curKeys);
     }
 
     // Then clear the hotkey from the key itself
-    hotkey.clearHotkey();
+    key.clearHotkey();
   };
 
   private readonly onHotkeyPress = (hotkey: string) => {
