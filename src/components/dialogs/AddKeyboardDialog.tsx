@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Notes } from '../../model/KeyboardItem';
+import { Notes, Octaves } from '../../model/KeyboardItem';
 import { AddKeyboardDialogState } from '../../state/AddKeyboardDialogState';
 
 import './add-keyboard-dialog.scss';
@@ -21,8 +21,12 @@ export class AddKeyboardDialog extends React.Component<Props> {
       <div className={'add-keyboard-dialog ' + openClass}>
         {this.renderFirstNoteSelect()}
 
+        {this.renderFirstOctaveSelect()}
+
+        {this.renderNumOctavesSelect()}
+
         <div className={'controls'}>
-          <button>Close</button>
+          <button onClick={() => dialogState.close()}>Close</button>
           <button onClick={() => onAddKeyboard()}>Add Keyboard</button>
         </div>
       </div>
@@ -53,6 +57,52 @@ export class AddKeyboardDialog extends React.Component<Props> {
           <option value={Notes.A}>A</option>
           <option value={Notes.A_SHARP}>A#</option>
           <option value={Notes.B}>B</option>
+        </select>
+      </div>
+    );
+  }
+
+  private renderFirstOctaveSelect() {
+    const { dialogState } = this.props;
+
+    return (
+      <div className={'first-octave-select'}>
+        <span className={'label'}>Start octave</span>
+        <select
+          value={dialogState.startOctave}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            dialogState.setStartOctave(e.target.value)
+          }
+        >
+          <option value={Octaves.ONE}>One</option>
+          <option value={Octaves.TWO}>Two</option>
+          <option value={Octaves.THREE}>Three</option>
+          <option value={Octaves.FOUR}>Four</option>
+          <option value={Octaves.FIVE}>Five</option>
+          <option value={Octaves.SIX}>Six</option>
+        </select>
+      </div>
+    );
+  }
+
+  private renderNumOctavesSelect() {
+    const { dialogState } = this.props;
+
+    return (
+      <div className={'first-octave-select'}>
+        <span className={'label'}>Octave count</span>
+        <select
+          value={dialogState.numOctaves}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            dialogState.setNumOctaves(e.target.value)
+          }
+        >
+          <option value={Octaves.ONE}>One</option>
+          <option value={Octaves.TWO}>Two</option>
+          <option value={Octaves.THREE}>Three</option>
+          <option value={Octaves.FOUR}>Four</option>
+          <option value={Octaves.FIVE}>Five</option>
+          <option value={Octaves.SIX}>Six</option>
         </select>
       </div>
     );

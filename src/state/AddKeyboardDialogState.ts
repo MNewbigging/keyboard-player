@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { Notes } from '../model/KeyboardItem';
+import { Notes, Octaves } from '../model/KeyboardItem';
 import { KeyboardUtils } from '../utils/KeyboardUtils';
 
 export enum KeyboardRowLocation {
@@ -10,6 +10,9 @@ export enum KeyboardRowLocation {
 export class AddKeyboardDialogState {
   @observable public open = false;
   @observable public startNote = Notes.C;
+  @observable public startOctave = Octaves.THREE;
+  @observable public numOctaves = 2;
+
   public location = KeyboardRowLocation.TOP;
 
   @action public startAddKeyboard(location: KeyboardRowLocation) {
@@ -23,5 +26,13 @@ export class AddKeyboardDialogState {
 
   @action public setStartNote(note: string) {
     this.startNote = KeyboardUtils.getNoteFromString(note);
+  }
+
+  @action public setStartOctave(octave: string) {
+    this.startOctave = KeyboardUtils.getOctaveFromString(octave);
+  }
+
+  @action public setNumOctaves(num: string) {
+    this.numOctaves = parseInt(num, 10);
   }
 }

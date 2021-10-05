@@ -23,8 +23,10 @@ export class AppState {
 
     const id = RandomId.createId();
     const startNote = this.addKeyboardDialogState.startNote;
+    const startOctave = this.addKeyboardDialogState.startOctave;
+    const numOctaves = this.addKeyboardDialogState.numOctaves;
 
-    const keyboard = new KeyboardItem(id, startNote);
+    const keyboard = new KeyboardItem(id, startNote, startOctave, numOctaves);
 
     if (loc === KeyboardRowLocation.TOP) {
       this.topRowKeyboards.push(keyboard);

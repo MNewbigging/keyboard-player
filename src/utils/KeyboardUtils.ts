@@ -48,6 +48,23 @@ export class KeyboardUtils {
     }
   }
 
+  public static getOctaveFromString(octave: string) {
+    switch (octave) {
+      case '1':
+        return Octaves.ONE;
+      case '2':
+        return Octaves.TWO;
+      case '3':
+        return Octaves.THREE;
+      case '4':
+        return Octaves.FOUR;
+      case '5':
+        return Octaves.FIVE;
+      case '6':
+        return Octaves.SIX;
+    }
+  }
+
   public static generateKeys(firstNote: Notes, firstOctave: Octaves, numOctaves: number) {
     const keys: KeyboardKey[] = [];
 

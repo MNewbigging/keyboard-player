@@ -47,9 +47,11 @@ export class KeyboardItem {
   @observable public hotkeyAssignKey?: KeyboardKey;
   private polySynth = new Tone.PolySynth().toDestination();
 
-  constructor(id: string, startNote: Notes) {
+  constructor(id: string, startNote: Notes, startOctave: Octaves, numOctaves: number) {
     this.id = id;
     this.firstNote = startNote;
+    this.firstOctave = startOctave;
+    this.octaves = numOctaves;
 
     this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
 
