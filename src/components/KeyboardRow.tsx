@@ -9,12 +9,13 @@ import './keyboard-row.scss';
 interface Props {
   keyboardRow: KeyboardItem[];
   addKeyboard: () => void;
+  removeKeyboard: (id: string) => void;
 }
 
 @observer
 export class KeyboardRow extends React.Component<Props> {
   public render() {
-    const { keyboardRow, addKeyboard } = this.props;
+    const { keyboardRow, addKeyboard, removeKeyboard } = this.props;
 
     return (
       <div className={'keyboard-row'}>
@@ -22,7 +23,7 @@ export class KeyboardRow extends React.Component<Props> {
           +
         </div>
         {keyboardRow.map((kb) => (
-          <Keyboard key={kb.id} keyboard={kb} />
+          <Keyboard key={kb.id} keyboard={kb} onRemove={() => removeKeyboard(kb.id)} />
         ))}
       </div>
     );

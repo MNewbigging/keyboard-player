@@ -34,4 +34,16 @@ export class AppState {
       this.botRowKeyboards.push(keyboard);
     }
   }
+
+  @action public removeKeyboard(id: string, location: KeyboardRowLocation) {
+    if (location === KeyboardRowLocation.TOP) {
+      const keyboard = this.topRowKeyboards.find((kb) => kb.id === id);
+      keyboard.removeKeyboard();
+      this.topRowKeyboards = this.topRowKeyboards.filter((kb) => kb.id !== id);
+    } else {
+      const keyboard = this.botRowKeyboards.find((kb) => kb.id === id);
+      keyboard.removeKeyboard();
+      this.botRowKeyboards = this.botRowKeyboards.filter((kb) => kb.id !== id);
+    }
+  }
 }

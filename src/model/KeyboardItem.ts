@@ -110,6 +110,12 @@ export class KeyboardItem {
     key.clearHotkey();
   };
 
+  public removeKeyboard() {
+    // First remove listeners or a ref to this keyboard still exists
+    hotkeyManager.removeListener(this.onHotkeyPress);
+    hotkeyManager.removeListener(this.onHotkeyRelease);
+  }
+
   private readonly onHotkeyPress = (hotkey: string) => {
     // First check if we're listening to assign a new hotkey
     if (this.hotkeyAssignKey) {

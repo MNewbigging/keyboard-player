@@ -7,11 +7,18 @@ import './keyboard-top-controls.scss';
 
 interface Props {
   keyboard: KeyboardItem;
+  onRemove: () => void;
 }
 
 @observer
 export class KeyboardTopControls extends React.Component<Props> {
   public render() {
-    return <div className={'keyboard-top-controls'}></div>;
+    const { onRemove } = this.props;
+
+    return (
+      <div className={'keyboard-top-controls'}>
+        <button onClick={() => onRemove()}>Remove</button>
+      </div>
+    );
   }
 }

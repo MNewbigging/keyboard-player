@@ -19,6 +19,11 @@ class HotkeyManager {
     this.keyUpListeners.push(listener);
   }
 
+  public removeListener(listener: HotkeyListener) {
+    this.keyDownListeners = this.keyDownListeners.filter((l) => l !== listener);
+    this.keyUpListeners = this.keyUpListeners.filter((l) => l !== listener);
+  }
+
   private onKeyDown = (e: KeyboardEvent) => {
     // This event fires every frame key is held
     if (this.lastPressedKey === e.key) {

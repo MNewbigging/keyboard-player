@@ -12,17 +12,18 @@ import './keyboard.scss';
 
 interface Props {
   keyboard: KeyboardItem;
+  onRemove: () => void;
 }
 
 @observer
 export class Keyboard extends React.Component<Props> {
   public render() {
-    const { keyboard } = this.props;
+    const { keyboard, onRemove } = this.props;
 
     return (
       <div className={'keyboard'}>
         <div className={'top-row'}>
-          <KeyboardTopControls keyboard={keyboard} />
+          <KeyboardTopControls keyboard={keyboard} onRemove={() => onRemove()} />
         </div>
         <div className={'clear-hk'}>
           <div className={'keyboard-button'} onClick={keyboard.clearAllHotkeys}>
