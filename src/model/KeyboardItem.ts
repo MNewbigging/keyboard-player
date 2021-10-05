@@ -47,8 +47,10 @@ export class KeyboardItem {
   @observable public hotkeyAssignKey?: KeyboardKey;
   private polySynth = new Tone.PolySynth().toDestination();
 
-  constructor(id: string) {
+  constructor(id: string, startNote: Notes) {
     this.id = id;
+    this.firstNote = startNote;
+
     this.keys = KeyboardUtils.generateKeys(this.firstNote, this.firstOctave, this.octaves);
 
     hotkeyManager.addKeyDownListener(this.onHotkeyPress);
@@ -57,26 +59,6 @@ export class KeyboardItem {
 
   public isKeyPlaying(key: KeyboardKey) {
     return this.keysPlaying.includes(key.name);
-  }
-
-  /**
-   * TODO
-   * - don't change the layout of an existing keyboard
-   * - on add, show dialog to choose start, octave etc
-   * - never change it after tha
-   *
-   */
-  @action public setStartKey(note: string) {
-    // Clear any hotkeys for the keyboard
-    this.clearAllHotkeys();
-
-    // Reverse-map string to enum
-    const noteValue = KeyboardUtils.getNoteFromString(note);
-
-    // Generate new keys based on given starting note
-    this.keys = KeyboardUtils.generateKeys(noteValue, this.firstOctave, this.octaves);
-
-    this.firstNote = noteValue;
   }
 
   public onMouseDownKey(key: KeyboardKey) {

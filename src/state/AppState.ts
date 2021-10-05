@@ -2,17 +2,34 @@ import { action, observable } from 'mobx';
 
 import { KeyboardItem } from '../model/KeyboardItem';
 import { RandomId } from '../utils/RandomId';
+import { AddKeyboardDialogState, KeyboardRowLocation } from './AddKeyboardDialogState';
 
 export class AppState {
-  @observable topRowKeyboards: KeyboardItem[] = [];
-  @observable botRowKeyboards: KeyboardItem[] = [];
+  @observable public topRowKeyboards: KeyboardItem[] = [];
+  @observable public botRowKeyboards: KeyboardItem[] = [];
+  public addKeyboardDialogState = new AddKeyboardDialogState();
 
-  @action addTopRowKeyboard() {
-    this.topRowKeyboards.push(new KeyboardItem(RandomId.createId()));
+  @action public startAddTopRowKeyboard() {
+    this.addKeyboardDialogState.startAddKeyboard(KeyboardRowLocation.TOP);
   }
 
-  @action addBotRowKeyboard() {
-    this.botRowKeyboards.push(new KeyboardItem(RandomId.createId()));
-    console.log('bot: ', this.botRowKeyboards);
+  @action public startAddBotRowKeyboard() {
+    this.addKeyboardDialogState.startAddKeyboard(KeyboardRowLocation.BOT);
+  }
+
+  @action public addKeyboard() {
+    this.addKeyboardDialogState.close();
+    const loc = this.addKeyboardDialogState.location;
+
+    const id = RandomId.createId();
+    const startNote = this.addKeyboardDialogState.startNote;
+
+    const keyboard = new KeyboardItem(id, startNote);
+
+    if (loc === KeyboardRowLocation.TOP) {
+      this.topRowKeyboards.push(keyboard);
+    } else {
+      this.botRowKeyboards.push(keyboard);
+    }
   }
 }
