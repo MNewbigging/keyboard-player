@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
 .keyboard-row {
   height: 100%;
 
@@ -10,7 +12,10 @@
     width: 50px;
     height: 50px;
     background-color: grey;
+    border-radius: 5px;
     color: white;
+    font-family: 'Comfortaa', cursive;
+    font-size: 1.5rem;
     margin-left: 5px;
     user-select: none;
     display: flex;
